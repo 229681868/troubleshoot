@@ -43,7 +43,7 @@ class Worker:
         cmd = "for var in `cat ~/share/hdd/log/worker.{4}.log|\
               grep {0}|egrep \"{1}|{2}\"|grep SectorId|awk '{3}'|\
               cut -d\" \" -f3`;do cat ~/share/hdd/log/worker.{4}.log|\
-              grep $var|grep seal_pre_commit_phase1 egrep \"{1}|{2}\";done".format(phase, self.date1, self.date2, "a[$3]++{print}", host_ip)
+              grep $var|grep seal_pre_commit_phase1|egrep \"{1}|{2}\";done".format(phase, self.date1, self.date2, "a[$3]++{print}", host_ip)
         #print(cmd)
 
         p1 = os.popen(cmd).read().strip().split("\n")
