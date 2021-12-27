@@ -35,10 +35,16 @@ class Worker:
         return spent_time
 
     def get_p1_status(self,phase,host_ip):
-        cmd = "cat ~/share/hdd/log/worker.{4}.log|\
-                grep {0}|egrep \"{1}|{2}\"|\
-                grep SectorId|sort -k 3|\
-                awk '/start/,/finish/{3}'".format(phase, self.date1, self.date2, "{print}", host_ip)
+        #cmd = "cat ~/share/hdd/log/worker.{4}.log|\
+        #        grep {0}|egrep \"{1}|{2}\"|\
+        #        grep SectorId|sort -k 3|\
+        #        awk '/start/,/finish/{3}'".format(phase, self.date1, self.date2, "{print}", host_ip)
+
+        cmd = "for var in `cat ~/share/hdd/log/worker.{4}.log|\
+              grep {0}|egrep \"{1}|{2}\"|grep SectorId|awk '{3}'|\
+              cut -d\" \" -f3`;do cat ~/share/hdd/log/worker.{4}.log|\
+              grep $var|grep seal_pre_commit_phase1 egrep \"{1}|{2}\";done".format(phase, self.date1, self.date2, "a[$3]++{print}", host_ip)
+        #print(cmd)
 
         p1 = os.popen(cmd).read().strip().split("\n")
         map = {}
