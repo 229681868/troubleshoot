@@ -71,14 +71,14 @@ def lost_sectors_info():
         print("{0}lost power info:{1}".format(red_head, red_tail) + lost_sectors_info)
 
 def help_info():
-    help_info = "lack of parameter example for {0} <parameter> \n \
-                all_worker_status \n \
-                worker_status <host_ip> \n \
-                miner_disk_status \n \
-                miner_gpu_status \n \
-                storage_network \n \
-                winning_block <day>\n \
-                lost_sectors \n \
+    help_info = "lack of parameter example for {0} <parameter> \n\
+                all_worker_status \n\n\
+                worker_status <host_ip> \n\n\
+                miner_disk_status \n\n\
+                miner_gpu_status \n\n\
+                storage_network \n\n \
+                winning_block <day>\n\n \
+                lost_sectors \n\n \
                 quickly_check".format(sys.argv[0])
     print(help_info)
 
@@ -108,7 +108,6 @@ if __name__ == '__main__':
             miner_gpu_status()
             minerTostorage_network()
             lost_sectors_info()
-            winning_block()
         else:
             help_info()
             exit(0)
