@@ -18,17 +18,17 @@ class Worker:
                             cut -d" " -f4').read()
             workers = list(re.sub(":[0-9]+", "", workers).strip().split("\n"))
         except IndexError:
-            print("not worker running")
+            print("no found worker running")
         return workers
 
-    def format_str(or_str):
+    def format_str(self,or_str):
         index1 = or_str.find("[20")
         index2 = or_str.find("][INFO]")
         or_str = or_str[index1:index2].replace("[", "").replace("]", " ")
         or_str = re.sub("\.[0-9]+", "", or_str)
         return or_str
 
-    def get_spent_time(or_time1,or_time2):
+    def get_spent_time(self,or_time1,or_time2):
         t1 = datetime.datetime.strptime(or_time1, '%Y-%m-%d %H:%M:%S')
         t2 = datetime.datetime.strptime(or_time2, '%Y-%m-%d %H:%M:%S')
         spent_time = t2 - t1
@@ -39,7 +39,6 @@ class Worker:
                 grep {0}|egrep \"{1}|{2}\"|\
                 grep SectorId|sort -k 3|\
                 awk '/start/,/finish/{3}'".format(phase, self.date1, self.date2, "{print}", host_ip)
-        #print(cmd)
 
         p1 = os.popen(cmd).read().strip().split("\n")
         map = {}
@@ -61,10 +60,8 @@ class Worker:
                 spent_time = self.get_spent_time(str1, str2)
                 map[p1_str1[p1_str1.find("SectorId"):]] = str(spent_time)
         except IndexError:
-            print("not seal_pre_commit_phase1 log")
-
+            print("no found seal_pre_commit_phase1 log")
         return map
-
 
     def get_p2_status(self,phase,host_ip):
         cmd = "cat ~/share/hdd/log/worker.{3}.log| \
@@ -92,7 +89,7 @@ class Worker:
                 spent_time = self.get_spent_time(or_time1, or_time2)
                 spent_time_list.append(str(spent_time))
         except IndexError:
-            print("not seal_pre_commit_phase2 log")
+            print("no found seal_pre_commit_phase2 log")
 
         return spent_time_list
 
@@ -124,10 +121,9 @@ class Worker:
                 spent_time = self.get_spent_time(str1, str2)
                 map[p1_str1[p1_str1.find("SectorId"):]] = str(spent_time)
         except IndexError:
-            print("not seal_commit_phase2 log")
+            print("no found seal_commit_phase2 log")
 
         return map
-
 
     def get_seal_num(self,phase, host_ip):
         cmd1 = "cat /home/ps/share/hdd/log/worker.{0}.log| \

@@ -1,27 +1,118 @@
 #!/usr/bin/python3.6
+
 import worker_phase_status
+import miner_status
 import sys
 
-def get_worker_status():
+red_head = "\033[1;31;40m"
+red_tail = "\033[0m"
+col_head = "\033[1;36;1m"
+col_tail = "\033[0m"
+
+
+def all_worker_status():
     worker = worker_phase_status.Worker()
     workers = worker.get_workers()
     for ip in workers:
-        print(ip)
-        print(worker.get_p1_status("seal_pre_commit_phase1", ip))
-        print(worker.get_p2_status("seal_pre_commit_phase2", ip))
-        print(worker.get_c2_status("seal_commit_phase2", ip))
-        print(worker.get_seal_num("seal_commit_phase2", ip))
+        print("{0}IP:{1}".format(col_head, col_tail) + ip)
+        p1_status = worker.get_p1_status("seal_pre_commit_phase1", ip)
+        p2_status = worker.get_p2_status("seal_pre_commit_phase2", ip)
+        c2_status = worker.get_c2_status("seal_commit_phase2", ip)
 
+        if p1_status:
+            print("{0}P1:{1}".format(col_head, col_tail) + str(p1_status))
+        if p2_status:
+            print("{0}P2:{1}".format(col_head, col_tail) + str(p2_status))
+        if c2_status:
+            print("{0}C2:{1}".format(col_head, col_tail) + str(c2_status))
+
+        print(str(worker.get_seal_num("seal_commit_phase2", ip)) + "{0} power/day {1}".format(col_head, col_tail))
+        print("----------------------------------------------------------")
+
+
+def worker_status(ip):
+    worker = worker_phase_status.Worker()
+    print("{0}IP:{1}".format(col_head, col_tail) + ip)
+    p1_status = worker.get_p1_status("seal_pre_commit_phase1", ip)
+    p2_status = worker.get_p2_status("seal_pre_commit_phase2", ip)
+    c2_status = worker.get_c2_status("seal_commit_phase2", ip)
+
+    if p1_status:
+        print("{0}P1:{1}".format(col_head, col_tail) + str(p1_status))
+    if p2_status:
+        print("{0}P2:{1}".format(col_head, col_tail) + str(p2_status))
+    if c2_status:
+        print("{0}C2:{1}".format(col_head, col_tail) + str(c2_status))
+    print(str(worker.get_seal_num("seal_commit_phase2", ip)) + "{0} power/day {1}".format(col_head, col_tail))
+    print("----------------------------------------------------------")
+
+def miner_disk_status():
+    miner = miner_status.Miner()
+    miner_disk_info = miner.miner_disk_status()
+    if miner_disk_info != "":
+        print("{0}Miner Disk status:{1}".format(col_head, col_tail) + miner_disk_info)
+
+def miner_gpu_status():
+    miner = miner_status.Miner()
+    print("{0}Miner Gpu status:{1}".format(col_head, col_tail) + miner.miner_gpu_status())
+
+def minerTostorage_network():
+    miner =  miner_status.Miner()
+    miner.minerTostorage_network()
+
+def winning_block(day):
+    miner = miner_status.Miner()
+    print("{0}winning nums:{1}".format(col_head, col_tail) + str(miner.winning_block(day)))
+
+def lost_sectors_info():
+    miner = miner_status.Miner()
+    lost_sectors_info = miner.lost_sectors_info()
+    if lost_sectors_info != "":
+        print("{0}lost power info:{1}".format(red_head, red_tail) + lost_sectors_info)
+
+def help_info():
+    help_info = "lack of parameter example for {0} <parameter> \n \
+                all_worker_status \n \
+                worker_status <host_ip> \n \
+                miner_disk_status \n \
+                miner_gpu_status \n \
+                storage_network \n \
+                winning_block <day>\n \
+                lost_sectors \n \
+                quickly_check".format(sys.argv[0])
+    print(help_info)
 
 if __name__ == '__main__':
-    result=""
+    result = ""
+    result = sys.argv[1:]
     try:
-        result = sys.argv[1]
+        if result[0] == "" or result[0] == "help":
+            help_info()
+            exit(0)
+        elif result[0] == "all_worker_status":
+            all_worker_status()
+        elif result[0] == "worker_status":
+            worker_status(result[1])
+        elif result[0] == "miner_disk_status":
+            miner_disk_status()
+        elif result[0] == "miner_gpu_status":
+            miner_gpu_status()
+        elif result[0] == "storage_network":
+            minerTostorage_network()
+        elif result[0] == "winning_block":
+            winning_block(result[1])
+        elif result[0] == "lost_sectors":
+            lost_sectors_info()
+        elif result[0] == "quickly_check":
+            miner_disk_status()
+            miner_gpu_status()
+            minerTostorage_network()
+            lost_sectors_info()
+            winning_block()
+        else:
+            help_info()
+            exit(0)
+
     except IndexError:
-        print("lack of parameter example for xxx.py worker_status")
-        exit(0)
-    if result == "":
-        print("lack of parameter example for xxx.py worker_status")
-        exit(0)
-    elif result == "worker_status":
-         get_worker_status()
+            help_info()
+            exit(0)
