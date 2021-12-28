@@ -49,7 +49,10 @@ class Miner:
            |egrep -i \"{0}\"| \
            egrep -i "generatewinningpost"'.format(time_range)
 
-       block_info=os.popen(cmd).read().strip().split("\n")
+       block_info=os.popen(cmd).read()
+       block_info=block_info.replace('"logger":"storageminer","caller":"storage/miner.go:297",',"").replace('"level":"info","ts":',"").replace('"msg":',"")
+       print(block_info)
+       block_info=block_info.strip().split("\n")
        block_num_from_log=len(block_info)
        return block_num_from_log
 
