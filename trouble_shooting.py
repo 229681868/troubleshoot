@@ -9,7 +9,6 @@ red_tail = "\033[0m"
 col_head = "\033[1;36;1m"
 col_tail = "\033[0m"
 
-
 def all_worker_status():
     worker = worker_phase_status.Worker()
     workers = worker.get_workers()
@@ -71,14 +70,14 @@ def lost_sectors_info():
         print("{0}lost power info:{1}".format(red_head, red_tail) + lost_sectors_info)
 
 def help_info():
-    help_info = "lack of parameter example for {0} <parameter> \n\
-                all_worker_status \n\n\
-                worker_status <host_ip> \n\n\
-                miner_disk_status \n\n\
-                miner_gpu_status \n\n\
-                storage_network \n\n \
-                winning_block <day>\n\n \
-                lost_sectors \n\n \
+    help_info = "lack of parameter example for {0} <parameter>\n\
+                all_worker_status\n\n\
+                worker_status <host_ip>\n\n\
+                miner_disk_status\n\n\
+                miner_gpu_status\n\n\
+                storage_network\n\n\
+                winning_block <day>\n\n\
+                lost_sectors\n\n\
                 quickly_check".format(sys.argv[0])
     print(help_info)
 

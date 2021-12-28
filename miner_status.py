@@ -17,7 +17,7 @@ class Miner:
             cmd="timeout 0.5 cat {0}/sectorstore.json".format(var)
             check_result=os.popen(cmd).read()
             if  check_result.find("Weight") < 0:
-                 disk_not_found_result+="\033[1:31:40m {0} disk not found \033[0m".format(var)+"\n"
+                 disk_not_found_result+="\033[1;31;40m {0} disk not found \033[0m".format(var)+"\n"
         return disk_not_found_result
 
 
@@ -28,7 +28,7 @@ class Miner:
         gpu_info = os.popen('nvidia-smi').read()
         gpu_log = os.popen(cmd).read()
         if gpu_log.lower().find("error")>0:
-            print("\033[1:31:40m gpu error {0} \033[0m".format(gpu_log[gpu_log.lower().find("error"):]))
+            print("\033[1;31;40m gpu error {0} \033[0m".format(gpu_log[gpu_log.lower().find("error"):]))
         gpu_info+="\n"+gpu_log
         return gpu_info
 
@@ -52,6 +52,7 @@ class Miner:
        block_info=os.popen(cmd).read().strip().split("\n")
        block_num_from_log=len(block_info)
        return block_num_from_log
+
 
     def lost_sectors_info(self):
         cmd='cat /home/ps/share/hdd/log/$(sudo supervisorctl status|cut -d" " -f1|grep miner).log \
