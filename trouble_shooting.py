@@ -165,7 +165,7 @@ if __name__ == '__main__':
             check_worker(result[1])
         elif result[0] == "worker_stop":
             worker_stop(result[1])
-        elif result[0] == "worker_start":
+        elif result[0] == "worker_start": 
             worker_start(result[1])
         elif result[0] == "all_worker_restart":
             all_worker_restart()
