@@ -1,5 +1,6 @@
 #!/usr/bin/python3.6
 import os
+import time
 
 import worker_phase_status
 import miner_status
@@ -70,11 +71,30 @@ def all_worker_check():
         print("{0}IP:{1}".format(col_head, col_tail) + ip)
         check_worker(ip)
 
+def all_worker_restart():
+    file = get_file("r")
+    hosts=file.read().strip().split("\n")
+    for ip in hosts:
+        worker_stop(ip)
+        time.sleep(2)
+        worker_start(ip)
+
+def worker_stop(ip):
+    cmd="sudo supervisorctl stop all "
+    connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, cmd)
+    os.system(connect)
+
+def worker_start(ip):
+    cmd="sudo supervisorctl start all "
+    connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, cmd)
+    os.system(connect)
+
+
 def get_file(mode):
     file = open("./fix_worker.lst", mode)
     return file
 
-def restart(ip):
+def restart_host(ip):
     connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, "sudo reboot")
     os.system(connect)
 
@@ -114,12 +134,15 @@ def help_info():
                 worker_status <host_ip>\n\n\
                 all_worker_check\n\n\
                 check_worker  <host_ip>\n\n\
+                all_worker_restart\n\n\
+                worker_stop <host_ip>\n\n\
+                worker_start <host_ip>\n\n\
                 miner_disk_status\n\n\
                 miner_gpu_status\n\n\
                 storage_network\n\n\
                 winning_block <day>\n\n\
                 lost_sectors\n\n\
-                restart <host_ip>\n\n\
+                restart_host <host_ip>\n\n\
                 quickly_check".format(sys.argv[0])
     print(help_info)
 
@@ -138,6 +161,10 @@ if __name__ == '__main__':
             all_worker_check()
         elif result[0] == "check_worker":
             check_worker(result[1])
+        elif result[0] == "worker_stop":
+            worker_stop(result[1])
+        elif result[0] == "worker_start":
+            worker_start(result[1])
         elif result[0] == "miner_disk_status":
             miner_disk_status()
         elif result[0] == "miner_gpu_status":
@@ -154,8 +181,8 @@ if __name__ == '__main__':
             minerTostorage_network()
             lost_sectors_info()
             miner_sync_staus()
-        elif result[0] == "restart":
-            restart(result[1])
+        elif result[0] == "restart_host":
+            restart_host(result[1])
         else:
             help_info()
             exit(0)
