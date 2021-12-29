@@ -45,6 +45,15 @@ def worker_status(ip):
     print(str(worker.get_seal_num("seal_commit_phase2", ip)) + "{0} power/day {1}".format(col_head, col_tail))
     print("----------------------------------------------------------")
 
+def check_worker(ip):
+    worker = worker_phase_status.Worker()
+    print("{0}Worker GPU INFO:{1}".format(col_head, col_tail))
+    worker.check_worker_gpu(ip)
+    print("{0}Worker DISK INFO:{1}".format(col_head, col_tail))
+    worker.check_worker_disk(ip)
+    print("{0}Worker Log:{1}".format(col_head, col_tail))
+    worker.get_worker_log(ip)
+
 def miner_disk_status():
     miner = miner_status.Miner()
     miner_disk_info = miner.miner_disk_status()
@@ -78,6 +87,7 @@ def help_info():
     help_info = "lack of parameter example for {0} <parameter>\n\
                 all_worker_status\n\n\
                 worker_status <host_ip>\n\n\
+                check_worker\n\n\
                 miner_disk_status\n\n\
                 miner_gpu_status\n\n\
                 storage_network\n\n\
@@ -97,6 +107,8 @@ if __name__ == '__main__':
             all_worker_status()
         elif result[0] == "worker_status":
             worker_status(result[1])
+        elif result[0] == "check_worker":
+            check_worker(result[1])
         elif result[0] == "miner_disk_status":
             miner_disk_status()
         elif result[0] == "miner_gpu_status":

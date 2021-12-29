@@ -3,6 +3,9 @@ import os
 import re
 import datetime
 
+import worker_phase_status
+
+
 class Worker:
     date1 = ""
     date2 = ""
@@ -21,21 +24,21 @@ class Worker:
             print("no found worker running")
         return workers
 
-    def format_str(self,or_str):
+    def format_str(self, or_str):
         index1 = or_str.find("[20")
         index2 = or_str.find("][INFO]")
         or_str = or_str[index1:index2].replace("[", "").replace("]", " ")
         or_str = re.sub("\.[0-9]+", "", or_str)
         return or_str
 
-    def get_spent_time(self,or_time1,or_time2):
+    def get_spent_time(self, or_time1, or_time2):
         t1 = datetime.datetime.strptime(or_time1, '%Y-%m-%d %H:%M:%S')
         t2 = datetime.datetime.strptime(or_time2, '%Y-%m-%d %H:%M:%S')
         spent_time = t2 - t1
         return spent_time
 
-    def get_p1_status(self,phase,host_ip):
-        #cmd = "cat ~/share/hdd/log/worker.{4}.log|\
+    def get_p1_status(self, phase, host_ip):
+        # cmd = "cat ~/share/hdd/log/worker.{4}.log|\
         #        grep {0}|egrep \"{1}|{2}\"|\
         #        grep SectorId|sort -k 3|\
         #        awk '/start/,/finish/{3}'".format(phase, self.date1, self.date2, "{print}", host_ip)
@@ -43,8 +46,9 @@ class Worker:
         cmd = "for var in `cat ~/share/hdd/log/worker.{4}.log|\
               grep {0}|egrep \"{1}|{2}\"|grep SectorId|awk '{3}'|\
               cut -d\" \" -f3|head -n 12`;do cat ~/share/hdd/log/worker.{4}.log|\
-              grep $var|grep seal_pre_commit_phase1|egrep \"{1}|{2}\";done".format(phase, self.date1, self.date2, "a[$3]++{print}", host_ip)
-        #print(cmd)
+              grep $var|grep seal_pre_commit_phase1|egrep \"{1}|{2}\";done".format(phase, self.date1, self.date2,
+                                                                                   "a[$3]++{print}", host_ip)
+        # print(cmd)
 
         p1 = os.popen(cmd).read().strip().split("\n")
         map = {}
@@ -69,7 +73,7 @@ class Worker:
             print("no found seal_pre_commit_phase1 log")
         return map
 
-    def get_p2_status(self,phase,host_ip):
+    def get_p2_status(self, phase, host_ip):
         cmd = "cat ~/share/hdd/log/worker.{3}.log| \
                 grep {0}| \
                 egrep \"{1}|{2}\"".format(phase, self.date1, self.date2, host_ip)
@@ -99,8 +103,7 @@ class Worker:
 
         return spent_time_list
 
-
-    def get_c2_status(self,phase,host_ip):
+    def get_c2_status(self, phase, host_ip):
         cmd = "cat ~/share/hdd/log/worker.{3}.log|\
                grep {0}|\
                egrep \"{1}|{2}\"|\
@@ -131,7 +134,7 @@ class Worker:
 
         return map
 
-    def get_seal_num(self,phase, host_ip):
+    def get_seal_num(self, phase, host_ip):
         cmd1 = "cat /home/ps/share/hdd/log/worker.{0}.log| \
                grep {1}| \
                grep \"{2}\"| \
@@ -144,3 +147,22 @@ class Worker:
         size = float(os.popen(cmd2).read().replace("(", ""))
         num = float(os.popen(cmd1).read())
         return num * size / 1024
+
+    def check_worker_disk(self, host_ip):
+        cmd = "for var in `sudo nvme list|grep nvme|cut -d\" \" -f1`;do echo $var&&sudo nvme smart-log $var ;done"
+        connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, host_ip, cmd)
+        os.system(connect)
+
+    def check_worker_gpu(self, host_ip):
+        cmd = "nvidia-smi -L"
+        connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, host_ip, cmd)
+        #print(connect)
+        os.system(connect)
+    def get_worker_log(self,host_ip):
+        cmd="tail -n 20 ~/share/hdd/log/worker.{0}.log".format(host_ip)
+        os.system(cmd)
+
+
+#if __name__ == '__main__':
+#    worker = worker_phase_status.Worker()
+#    #print(worker.get_workers())
