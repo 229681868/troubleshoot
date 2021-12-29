@@ -14,7 +14,7 @@ def all_worker_status():
     worker = worker_phase_status.Worker()
     workers = worker.get_workers()
     abnormal_hosts=[]
-    file = open("./fix_worker.lst", "a+")
+    file=get_file("a+")
     file.truncate(0)
     for ip in workers:
         print("{0}IP:{1}".format(col_head, col_tail) + ip)
@@ -34,7 +34,7 @@ def all_worker_status():
 
         print(str(worker.get_seal_num("seal_commit_phase2", ip)) + "{0} power/day {1}".format(col_head, col_tail))
         print("----------------------------------------------------------")
-    print("{0}restore:{1}".format(col_head, col_tail) + str(abnormal_hosts))
+    print("{0}hosts:{1}".format(col_head, col_tail) + str(abnormal_hosts))
     file.close()
 
 
@@ -62,6 +62,17 @@ def check_worker(ip):
     worker.check_worker_disk(ip)
     print("{0}Worker Log:{1}".format(col_head, col_tail))
     worker.get_worker_log(ip)
+
+def all_worker_check():
+    file = get_file("r")
+    hosts=file.read().strip().split("\n")
+    for ip in hosts:
+        print("{0}IP:{1}".format(col_head, col_tail) + ip)
+        check_worker(ip)
+
+def get_file(mode):
+    file = open("./fix_worker.lst", mode)
+    return file
 
 def restart(ip):
     connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, "sudo reboot")
@@ -101,6 +112,7 @@ def help_info():
     help_info = "lack of parameter example for {0} <parameter>\n\
                 all_worker_status\n\n\
                 worker_status <host_ip>\n\n\
+                all_worker_check\n\n\
                 check_worker  <host_ip>\n\n\
                 miner_disk_status\n\n\
                 miner_gpu_status\n\n\
@@ -122,6 +134,8 @@ if __name__ == '__main__':
             all_worker_status()
         elif result[0] == "worker_status":
             worker_status(result[1])
+        elif result[0] == "all_worker_check":
+            all_worker_check()
         elif result[0] == "check_worker":
             check_worker(result[1])
         elif result[0] == "miner_disk_status":
