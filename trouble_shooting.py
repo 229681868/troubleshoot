@@ -123,6 +123,10 @@ def winning_block(day):
     miner = miner_status.Miner()
     print("{0}winning nums:{1}".format(col_head, col_tail) + str(miner.winning_block(day)))
 
+def lost_block_check(time):
+    miner = miner_status.Miner()
+    print("{0}lost block check :{1}".format(col_head, col_tail) + str(miner.lost_block_check(time)))
+
 def lost_sectors_info():
     miner = miner_status.Miner()
     lost_sectors_info = miner.lost_sectors_info()
@@ -165,7 +169,7 @@ if __name__ == '__main__':
             check_worker(result[1])
         elif result[0] == "worker_stop":
             worker_stop(result[1])
-        elif result[0] == "worker_start": 
+        elif result[0] == "worker_start":
             worker_start(result[1])
         elif result[0] == "all_worker_restart":
             all_worker_restart()
@@ -178,7 +182,7 @@ if __name__ == '__main__':
         elif result[0] == "winning_block":
             winning_block(result[1])
         elif result[0] == "lost_block_check":
-            winning_block(result[1])
+            lost_block_check(result[1])
         elif result[0] == "lost_sectors":
             lost_sectors_info()
         elif result[0] == "quickly_check":
