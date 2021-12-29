@@ -60,6 +60,14 @@ class Miner:
        return block_num_from_log
 
 
+    def lost_block_check(self,time):
+       cmd='cat ~/share/hdd/log/$(sudo supervisorctl status|cut -d" " -f1|grep miner).log* \
+           |grep -15 \"{0}\"|grep parent'.format(time)
+       block_info=os.popen(cmd).read()
+       #print(block_info)
+       return block_info
+
+
     def lost_sectors_info(self):
         cmd='cat /home/ps/share/hdd/log/$(sudo supervisorctl status|cut -d" " -f1|grep miner).log \
             |egrep -i "sector file stat error \

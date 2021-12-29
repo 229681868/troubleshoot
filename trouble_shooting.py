@@ -142,6 +142,7 @@ def help_info():
                 miner_gpu_status\n\n\
                 storage_network\n\n\
                 winning_block <day>\n\n\
+                lost_block_check\n\n\
                 lost_sectors\n\n\
                 restart_host <host_ip>\n\n\
                 quickly_check".format(sys.argv[0])
@@ -175,6 +176,8 @@ if __name__ == '__main__':
         elif result[0] == "storage_network":
             minerTostorage_network()
         elif result[0] == "winning_block":
+            winning_block(result[1])
+        elif result[0] == "lost_block_check":
             winning_block(result[1])
         elif result[0] == "lost_sectors":
             lost_sectors_info()
