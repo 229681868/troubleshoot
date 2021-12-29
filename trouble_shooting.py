@@ -101,7 +101,6 @@ def help_info():
                 lost_sectors\n\n\
                 restart <host_ip>\n\n\
                 quickly_check".format(sys.argv[0])
-    check_worker(result[1])
     print(help_info)
 
 if __name__ == '__main__':
