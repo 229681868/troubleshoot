@@ -19,7 +19,7 @@ def all_worker_status():
         p2_status = worker.get_p2_status("seal_pre_commit_phase2", ip)
         c2_status = worker.get_c2_status("seal_commit_phase2", ip)
 
-        if str(p1_status).find("no found") and str(p2_status).find("no found"):
+        if str(p1_status).find("no found") > 0 and str(p2_status).find("no found") > 0:
             print(ip)
             with open ("./fix_worker.lst","w+") as f:
                  f.truncate(0)
