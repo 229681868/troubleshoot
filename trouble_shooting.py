@@ -1,4 +1,5 @@
 #!/usr/bin/python3.6
+import os
 
 import worker_phase_status
 import miner_status
@@ -54,6 +55,11 @@ def check_worker(ip):
     print("{0}Worker Log:{1}".format(col_head, col_tail))
     worker.get_worker_log(ip)
 
+def restart(ip):
+    connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, "sudo restart")
+    os.system(connect)
+
+
 def miner_disk_status():
     miner = miner_status.Miner()
     miner_disk_info = miner.miner_disk_status()
@@ -87,13 +93,15 @@ def help_info():
     help_info = "lack of parameter example for {0} <parameter>\n\
                 all_worker_status\n\n\
                 worker_status <host_ip>\n\n\
-                check_worker\n\n\
+                check_worker  <host_ip>\n\n\
                 miner_disk_status\n\n\
                 miner_gpu_status\n\n\
                 storage_network\n\n\
                 winning_block <day>\n\n\
                 lost_sectors\n\n\
+                restart <host_ip>\n\n\
                 quickly_check".format(sys.argv[0])
+    check_worker(result[1])
     print(help_info)
 
 if __name__ == '__main__':
@@ -125,6 +133,8 @@ if __name__ == '__main__':
             minerTostorage_network()
             lost_sectors_info()
             miner_sync_staus()
+        elif result[0] == "restart":
+            restart(result[1])
         else:
             help_info()
             exit(0)
