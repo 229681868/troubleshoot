@@ -165,6 +165,8 @@ if __name__ == '__main__':
             worker_stop(result[1])
         elif result[0] == "worker_start":
             worker_start(result[1])
+        elif result[0] == "all_worker_restart":
+            all_worker_restart()
         elif result[0] == "miner_disk_status":
             miner_disk_status()
         elif result[0] == "miner_gpu_status":
