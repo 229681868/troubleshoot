@@ -13,6 +13,7 @@ col_tail = "\033[0m"
 def all_worker_status():
     worker = worker_phase_status.Worker()
     workers = worker.get_workers()
+    abnormal_hosts=[]
     file = open("./fix_worker.lst", "a+")
     file.truncate(0)
     for ip in workers:
@@ -23,7 +24,7 @@ def all_worker_status():
         if len(p1_status) == 0 and len(p2_status) == 0:
                 file.write(ip+"\n")
                 file.flush()
-
+                abnormal_hosts.append(ip)
         if p1_status:
             print("{0}P1:{1}".format(col_head, col_tail) + str(p1_status))
         if p2_status:
@@ -33,6 +34,7 @@ def all_worker_status():
 
         print(str(worker.get_seal_num("seal_commit_phase2", ip)) + "{0} power/day {1}".format(col_head, col_tail))
         print("----------------------------------------------------------")
+    print("{0}restore:{1}".format(col_head, col_tail) + str(abnormal_hosts))
     file.close()
 
 
