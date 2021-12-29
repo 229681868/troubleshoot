@@ -32,6 +32,10 @@ class Miner:
         gpu_info+="\n"+gpu_log
         return gpu_info
 
+    def miner_sync_staus(self):
+        cmd = 'timeout 3 lotus sync wait'
+        os.system(cmd)
+
     def minerTostorage_network(self):
         os.system('iperf -s >> /tmp/network_minerToStorage.log&')
         os.system('fab iperf')

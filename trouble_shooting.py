@@ -59,6 +59,11 @@ def minerTostorage_network():
     miner =  miner_status.Miner()
     miner.minerTostorage_network()
 
+
+def miner_sync_staus():
+    miner =  miner_status.Miner()
+    miner.miner_sync_staus()
+
 def winning_block(day):
     miner = miner_status.Miner()
     print("{0}winning nums:{1}".format(col_head, col_tail) + str(miner.winning_block(day)))
@@ -107,6 +112,7 @@ if __name__ == '__main__':
             miner_gpu_status()
             minerTostorage_network()
             lost_sectors_info()
+            miner_sync_staus()
         else:
             help_info()
             exit(0)
