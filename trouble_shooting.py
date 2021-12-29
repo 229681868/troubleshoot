@@ -146,7 +146,7 @@ def help_info():
                 miner_gpu_status\n\n\
                 storage_network\n\n\
                 winning_block <day>\n\n\
-                lost_block_check\n\n\
+                lost_block_check <time>\n\n\
                 lost_sectors\n\n\
                 restart_host <host_ip>\n\n\
                 quickly_check".format(sys.argv[0])
