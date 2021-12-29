@@ -23,7 +23,7 @@ class Miner:
 
     def miner_gpu_status(self):
         cmd = 'cat /home/ps/share/hdd/log/miner*.log| \
-               grep -i gpu| \
+               grep -iw gpu| \
                tail -n 18'
         gpu_info = os.popen('nvidia-smi').read()
         gpu_log = os.popen(cmd).read()
