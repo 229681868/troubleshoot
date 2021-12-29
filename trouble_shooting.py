@@ -18,9 +18,9 @@ def all_worker_status():
         p1_status = worker.get_p1_status("seal_pre_commit_phase1", ip)
         p2_status = worker.get_p2_status("seal_pre_commit_phase2", ip)
         c2_status = worker.get_c2_status("seal_commit_phase2", ip)
-    
+
         if len(p1_status) == 0 and len(p2_status) == 0:
-            with open ("./fix_worker.lst","w+") as f:
+            with open ("./fix_worker.lst","a+") as f:
                  f.truncate(0)
                  f.writelines(ip)
                  f.close()
