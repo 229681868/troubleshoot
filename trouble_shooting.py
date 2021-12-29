@@ -75,6 +75,7 @@ def all_worker_restart():
     file = get_file("r")
     hosts=file.read().strip().split("\n")
     for ip in hosts:
+        print("{0}IP:{1}".format(col_head, col_tail) + ip)
         worker_stop(ip)
         time.sleep(2)
         worker_start(ip)
