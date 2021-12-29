@@ -56,7 +56,7 @@ def check_worker(ip):
     worker.get_worker_log(ip)
 
 def restart(ip):
-    connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, "sudo restart")
+    connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, "sudo reboot")
     os.system(connect)
 
 
