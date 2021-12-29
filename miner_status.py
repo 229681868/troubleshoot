@@ -52,7 +52,6 @@ class Miner:
        cmd='cat ~/share/hdd/log/$(sudo supervisorctl status|cut -d" " -f1|grep miner).log* \
            |egrep -i \"{0}\"| \
            egrep -i "generatewinningpost"|sort -r'.format(time_range)
-       print(cmd)
        block_info=os.popen(cmd).read()
        block_info=block_info.replace('"logger":"storageminer","caller":"storage/miner.go:297",',"").replace('"level":"info","ts":',"").replace('"msg":',"")
        print(block_info)
