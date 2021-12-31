@@ -1,4 +1,5 @@
-python3 trouble_shooting.py <parameter>
+
+    python3 trouble_shooting.py <parameter>
 
 all_worker_status 统计当前worker机，p1,p2,c2运行时间情况，统计日算力
 
