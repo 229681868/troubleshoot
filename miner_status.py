@@ -75,6 +75,3 @@ class Miner:
             |time out"'
         lost_sectors_info = os.popen(cmd).read().strip()
         return lost_sectors_info
-
-
-

@@ -95,6 +95,7 @@ def get_file(mode):
     file = open("./fix_worker.lst", mode)
     return file
 
+
 def restart_host(ip):
     connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''.format(10, ip, "sudo reboot")
     os.system(connect)
@@ -113,7 +114,6 @@ def miner_gpu_status():
 def minerTostorage_network():
     miner =  miner_status.Miner()
     miner.minerTostorage_network()
-
 
 def miner_sync_staus():
     miner =  miner_status.Miner()
@@ -137,9 +137,9 @@ def help_info():
     help_info = "lack of parameter example for {0} <parameter>\n\
                 all_worker_status\n\n\
                 worker_status <host_ip>\n\n\
-                all_worker_check\n\n\
+                fix_worker_check\n\n\
                 check_worker  <host_ip>\n\n\
-                all_worker_restart\n\n\
+                fix_worker_restart\n\n\
                 worker_stop <host_ip>\n\n\
                 worker_start <host_ip>\n\n\
                 miner_disk_status\n\n\
@@ -163,7 +163,7 @@ if __name__ == '__main__':
             all_worker_status()
         elif result[0] == "worker_status":
             worker_status(result[1])
-        elif result[0] == "all_worker_check":
+        elif result[0] == "fix_worker_check":
             all_worker_check()
         elif result[0] == "check_worker":
             check_worker(result[1])
@@ -171,7 +171,7 @@ if __name__ == '__main__':
             worker_stop(result[1])
         elif result[0] == "worker_start":
             worker_start(result[1])
-        elif result[0] == "all_worker_restart":
+        elif result[0] == "fix_worker_restart":
             all_worker_restart()
         elif result[0] == "miner_disk_status":
             miner_disk_status()
