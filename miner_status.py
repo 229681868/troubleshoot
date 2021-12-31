@@ -36,12 +36,32 @@ class Miner:
         cmd = 'timeout 3 lotus sync wait'
         os.system(cmd)
 
-    def minerTostorage_network(self):
+    def storageTominer_network(self):
         os.system('iperf -s >> /tmp/network_minerToStorage.log&')
         os.system('fab iperf')
         os.system('cat /tmp/network_minerToStorage.log')
         os.system('pkill iperf&&cp /dev/null /tmp/network_minerToStorage.log')
 
+
+    def minerTostorage_network(self):
+        cmd="cat ~/share/ssd/data/lotus`sudo supervisorctl status \
+            |cut -d\" \" -f1  \
+            |grep miner`/storage.json \
+            |grep -iw path|cut -d \"/\" -f 3|uniq"
+
+        storage_ip_list =  os.popen(cmd).read().strip('"').strip().split("\n")
+        for ip in storage_ip_list:
+            cmd1="iperf -s"
+            cmd2="iperf -t 1 -c {0}".format(ip)
+            cmd3="pkill iperf"
+            cmd4="cp /dev/null /tmp/network_minerToStorage.log"
+            connect = 'timeout {0} ssh -o StrictHostKeyChecking=no {1} \'{2}\''
+            #print(connect.format(1, ip, cmd1))
+            os.system(connect.format(1, ip, cmd1))
+            os.system(cmd2.format(ip))
+            #print(connect.format(1, ip, cmd2))
+            os.system(connect.format(1, ip, cmd3))
+            os.system(cmd4)
 
     def winning_block(self,day):
        time_range = ""

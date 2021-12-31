@@ -115,6 +115,11 @@ def minerTostorage_network():
     miner =  miner_status.Miner()
     miner.minerTostorage_network()
 
+def storageTominer_network():
+    miner =  miner_status.Miner()
+    miner.storageTominer_network()
+
+
 def miner_sync_staus():
     miner =  miner_status.Miner()
     miner.miner_sync_staus()
@@ -144,7 +149,8 @@ def help_info():
                 worker_start <host_ip>\n\n\
                 miner_disk_status\n\n\
                 miner_gpu_status\n\n\
-                storage_network\n\n\
+                storage_to_miner_network\n\n\
+                miner_to_storage_network\n\n\
                 winning_block <day>\n\n\
                 lost_block_check <time>\n\n\
                 lost_sectors\n\n\
@@ -177,7 +183,9 @@ if __name__ == '__main__':
             miner_disk_status()
         elif result[0] == "miner_gpu_status":
             miner_gpu_status()
-        elif result[0] == "storage_network":
+        elif result[0] == "storage_to_miner_network":
+            storageTominer_network()
+        elif result[0] == "miner_to_storage_network":
             minerTostorage_network()
         elif result[0] == "winning_block":
             winning_block(result[1])
